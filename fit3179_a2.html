@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="fit3179_a2.css">
+    <title>FIT3179 Data Visualization 2</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <h1 class="centered_title">Climate Change Statistics</h1>
+  <!-- Container for the visualization -->
+  <div class="centered_container">
+    <div id="choropleth_map" class="centered_div">
+      <script>
+        const vis1 = {
+          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+          "title": "Global Annual Surface Temperatures",
+          "width": 800,
+          "height": 400,
+          "params": [
+            {
+              "name": "Year_selection",
+              "value": 2022,
+              "bind": {
+                "input": "range",
+                "min": 1990,
+                "max": 2022,
+                "step": 1,
+                "name": "Year:  "
+              }
+            }
+          ],
+          "projection": {"type": "equalEarth"},
+          "layer": [
+            {
+              "data": {
+                "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+                "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+              },
+              "transform": [
+                {
+                  "calculate": "'Data is not available in ' + datum.properties.NAME",
+                  "as": "note"
+                }
+              ],
+              "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"},
+              "encoding": {"tooltip": {"field": "note"}}
+            },
+            {
+              "data": {
+                "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/7_others/oceans.topojson",
+                "format": {"type": "topojson", "feature": "oceans"}
+              },
+              "mark": {"type": "geoshape", "fill": "skyblue"}
+            },
+            {
+              "data": {
+                "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/yearly-average-surface-temperature.csv"
+              },
+              "transform": [
+                {
+                  "lookup": "ISO_Code",
+                  "from": {
+                    "data": {
+                      "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+                      "format": {
+                        "type": "topojson", 
+                        "feature": "ne_110m_admin_0_countries"
+                        }
+                    },
+                  "key": "properties.ISO_A3"
+                  },
+                  "as": "geo"
+                },
+                {
+                  "filter": "datum.Year == Year_selection"
+                }
+              ],
+              "mark": {
+                "type": "geoshape", 
+                "stroke": "white"
+              }, 
+              "encoding": {
+                "shape": {"field": "geo", "type": "geojson"},
+                "color": {
+                  "field": "Temperature",
+                  "type": "quantitative",
+                  "scale": {"domain": [-20, 30], "scheme": "reds"},
+                  "legend": {"format": ".2s"}
+                },
+                "tooltip": [
+                  {"field": "Country", "type": "nominal", "title": "Country"},
+                  {
+                    "field": "Temperature",
+                    "type": "quantitative",
+                    "title": "Annual Surface Tempearture",
+                    "format": ","
+                  },
+                  {"field": "Year", "type": "quantitative", "title": "Year"}
+                ]
+              }
+            }
+          ],
+          "config": {}
+        }; 
+        vegaEmbed('#choropleth_map', vis1, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+    
+  <br>
+
+  <div class="centered_container">
+    <div id="area_chart" class="centered_div">
+      <script>
+        const vis2 = {
+          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+          "data": {
+            "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/co-emissions-per-capita.csv"
+          },
+          "vconcat": [
+            {
+              "width": 750,
+              "height": 375,
+              "title": "Annual CO2 Emissions per capita by Region (t)",
+              "mark": "area",
+              "encoding": {
+                "x": {
+                  "field": "Year",
+                  "type": "temporal",
+                  "scale": {"domain": {"param": "brush"}},
+                  "axis": {"title": "", "tickCount": 10}
+                },
+                "y": {
+                  "aggregate": "sum", 
+                  "field": "Annual-co2-emissions-per-capita",
+                  "title": "CO2 Emissions per capita (t)"
+                  },
+                "color": {
+                  "field": "Entity", "scale": {"scheme": "category10"}
+                },
+                "tooltip": [
+                  {
+                    "field": "Entity", 
+                    "type": "nominal", 
+                    "title": "Region:"
+                  },
+                  {
+                    "field": "Year", 
+                    "type": "temporal", 
+                    "title": "Year:",
+                    "format": "%Y"
+                  },
+                  {
+                    "field": "Annual-co2-emissions-per-capita", 
+                    "type": "quantitative", 
+                    "title": "CO2 Emissions (t):"
+                  }
+                ]
+              }
+            },
+            {
+              "width": 750,
+              "height": 75,
+              "title": "Click and drag to filter data based on interval",
+              "mark": "area",
+              "params": [
+                {"name": "brush", "select": {"type": "interval", "encodings": ["x"]}}
+              ],
+              "encoding": {
+                "x": {"field": "Year", "type": "temporal", "axis": {"tickCount": 10}},
+                "y": {
+                  "aggregate": "sum",
+                  "field": "Annual-co2-emissions-per-capita",
+                  "title": "Emissions"
+                },
+                "color": {
+                  "field": "Entity", "scale": {"scheme": "category10"},
+                  "legend": {
+                    "title": "Region"
+                  }
+                }
+              }
+            }
+          ]
+        };
+        vegaEmbed('#area_chart', vis2, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="centered_container">
+    <div id="scatter_plot" class="centered_div">
+      <script>
+        const vis3 = {
+          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+          "data": {
+            "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/co2-emissions-vs-gdp.csv"
+          },
+          "params": [
+            {
+            "name": "grid",
+            "select": "interval",
+            "bind": "scales"
+            },
+            {
+              "name": "search_input",
+              "bind": {
+                "input": "search",
+                "placeholder": "Country name",
+                "name": "Search"
+              },
+              "value": ""
+            }
+          ],
+          "vconcat": [
+            {
+              "width": 750,
+              "height": 500,
+              "title": "CO2 Emissions vs GDP by Country (2022)",
+              "mark": "circle",
+              "encoding": {
+                "x": {
+                  "field": "Annual-CO2-Emissions",
+                  "type": "quantitative",
+                  "axis": {"title": "CO2 Emissions per capita (t)", "tickCount": 10}
+                },
+                "y": {
+                  "field": "GDP-per-capita",
+                  "type": "quantitative",
+                  "axis": {"title": "GDP per capita (USD)", "tickCount": 10}
+                },
+                "size": {
+                  "field": "Population",
+                  "type": "quantitative",
+                  "scale": {
+                    "type": "threshold",
+                    "domain": [1000000, 10000000, 100000000, 1000000000],
+                    "range": [20, 50, 100, 200, 500]
+                  },
+                  "legend": {
+                  "format": ","
+                  }
+                },
+                "opacity": {
+                  "condition": {
+                    "test": "test(regexp(search_input,'i'),datum.Country)",
+                    "value": 0.6
+                  },
+                  "value": 0.1
+                },
+                "tooltip": [
+                  {
+                    "field": "Country", 
+                    "type": "nominal", 
+                    "title": "Country:"
+                  },
+                  {
+                    "field": "Population", 
+                    "type": "quantitative", 
+                    "title": "Population:",
+                    "format": ","
+                  },
+                  {
+                    "field": "GDP-per-capita", 
+                    "type": "quantitative", 
+                    "title": "GDP:",
+                    "format": "$,d"
+                  },
+                  {
+                    "field": "Annual-CO2-Emissions", 
+                    "type": "quantitative", 
+                    "title": "CO2 Emissions (t):"
+                  }
+                ]
+              }
+            }
+          ]
+        };
+        vegaEmbed('#scatter_plot', vis3, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+
+</body>
+</html>

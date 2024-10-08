@@ -1,0 +1,34 @@
+.centered_title {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .centered_subtitle {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  
+  .centered_text {
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+  
+  .centered_button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+.centered_container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+  }
+  
+  .centered_div {
+    padding: 30px;
+  }
