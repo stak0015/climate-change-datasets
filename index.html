@@ -88,7 +88,7 @@
                 "color": {
                   "field": "Temperature",
                   "type": "quantitative",
-                  "scale": {"domain": [-20, 30], "scheme": "redblue", "reverse": true},
+                  "scale": {"domain": [0, 30], "scheme": "redblue", "reverse": true, "clamp": true},
                   "legend": {"format": ".2s"}
                 },
                 "tooltip": [
@@ -386,6 +386,93 @@
   }
 };
         vegaEmbed('#line_chart', vis4, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+
+    <br>
+
+  <div class="centered_container">
+    <div id="us_map" class="centered_div">
+      <script>
+        const vis5 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 750,
+  "height": 500,
+  "title": "Sea Level Change along the US Coasts (1960-2023)",
+  "projection": {"type": "albersUsa"},
+  "background": "lightblue",
+  "layer": [
+    {
+      "data": {
+        "url": "data/us-10m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#D2E4B9",
+        "stroke": "white"
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/us-sea-level-change.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.Latitude >= 24.396308 && datum.Latitude <= 49.384358 && datum.Longitude >= -125.0 && datum.Longitude <= -66.93457 || datum.State == 'Alaska' || datum.State == 'Hawaii'"
+        },
+        {
+          "calculate": "abs(datum['Relative-sea-level-change'])",
+          "as": "deviation"
+        } 
+      ],
+      "mark": {
+        "type": "text"
+      },
+      "encoding": {
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "size": {
+          "field": "deviation",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0,20],
+            "range": [20,60],
+            "clamp": true
+          }, "legend": {
+            "title": "Absolute change (mm)"
+          }
+        },
+        "text": {"condition": {
+          "test": "toNumber(datum['Relative-sea-level-change']) < 0", "value": "↓"},
+          "value": "↑"
+        },
+        "color": {
+          "field": "Relative-sea-level-change",
+          "type": "quantitative",
+          "scale": {
+            "domain": [-20, 20],
+            "range": ["#6863AD", "#77B2DD", "#AFD8B0", "#F3EB3A", "#F49B4F", "#EC4A4E"],
+            "clamp": true
+          }, 
+          "legend": {
+            "title": "Sea level change (mm)"
+          }
+        },
+        "tooltip": [
+          {"field": "State", "title": "State: "},
+          {"field": "Location", "title": "Location: "},
+          {"field": "Relative-sea-level-change", "title": "Sea level change: "},
+        ]
+      }
+    }
+  ]
+};
+        vegaEmbed('#us_map', vis5, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
       </script>
     </div>
   </div>
