@@ -1,4 +1,8 @@
-.body {
+body {
+    font-family: Arial, sans-serif;
+}
+
+svg text {
     font-family: Arial, sans-serif;
 }
 
