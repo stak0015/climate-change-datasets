@@ -195,7 +195,7 @@
   <br>
 
   <div class="centered_container">
-    <div id="scatter_plot" class="centered_div">
+    <div id="stacked_bar_chart" class="centered_div">
       <script>
         const vis3 = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -256,7 +256,42 @@
     ]
   }
 };
-        vegaEmbed('#scatter_plot', vis3, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+        vegaEmbed('#stacked_bar_chart', vis3, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+
+<br>
+
+  <div class="centered_container">
+    <div id="line_chart" class="centered_div">
+      <script>
+        const vis4 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Stock prices of 5 Tech Companies over Time.",
+  "data": {"url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/ghg-emissions-by-sector.csv"},
+  "title": "Annual Greenhouse Gas Emissions by Sector (1990-2020)",
+  "width": 750,
+  "height": 500,
+  "mark": {
+    "type": "line",
+    "point": {
+      "filled": false,
+      "fill": "white"
+    }
+  },
+  "encoding": {
+    "x": {"field": "Year", "type": "ordinal", "axis": {"labelExpr": "datum.label % 5 == 0 ? datum.label : ''"}},
+    "y": {"field": "Emissions", "type": "quantitative", "title": "Greenhouse Gas Emissions (t)"},
+    "color": {"field": "Sector", "type": "nominal"},
+    "tooltip": [
+      {"field": "Sector", "type": "nominal", "title": "Sector: "},
+      {"field": "Year", "type": "ordinal", "title": "Year: "},
+      {"field": "Emissions", "type": "quantitative", "title": "Annual Emissions (t): ", "format": ","}
+    ]
+  }
+};
+        vegaEmbed('#line_chart', vis4, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
       </script>
     </div>
   </div>
