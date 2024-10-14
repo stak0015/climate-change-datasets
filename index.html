@@ -273,13 +273,101 @@
   "title": "Annual Greenhouse Gas Emissions by Sector (1990-2020)",
   "width": 750,
   "height": 500,
-  "mark": {
-    "type": "line",
-    "point": {
-      "filled": false,
-      "fill": "white"
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "point": {
+          "filled": false,
+          "fill": "white"
+        }
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"}
+      ],
+      "mark": {
+        "type": "rect",
+        "xOffset": -80,
+        "yOffset": 68,
+        "width": 170,
+        "height": 90,
+        "fill": "yellow",
+        "fillOpacity": 0.15,
+        "stroke": "black",
+        "cornerRadius": 5
+      },
+      "encoding": {
+        "text": {"field": "label"}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+        {
+          "calculate": "'Highest Sector'",
+          "as": "label"
+        },
+      ],
+      "mark": {
+        "type": "text",
+        "xOffset": -80,
+        "yOffset": 45,
+        "fontSize": 15,
+        "lineBreak": "_",
+        "lineHeight": 25,
+        "fill": "black",
+        "fontWeight": "bold"
+        
+      },
+      "encoding": {
+        "text": {"field": "label"}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+        {
+          "calculate": "'Electricity and heat'",
+          "as": "label"
+        },
+      ],
+      "mark": {
+        "type": "text",
+        "xOffset": -80,
+        "yOffset": 70,
+        "fontSize": 15,
+        "lineBreak": "_",
+        "lineHeight": 25,
+        "fill": "black"
+      },
+      "encoding": {
+        "text": {"field": "label"}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+        {
+          "calculate": "'(+75% between 1990-2020)'",
+          "as": "label"
+        },
+      ],
+      "mark": {
+        "type": "text",
+        "xOffset": -80,
+        "yOffset": 90,
+        "fontSize": 12,
+        "lineBreak": "_",
+        "lineHeight": 25,
+        "fill": "red"
+      },
+      "encoding": {
+        "text": {"field": "label"}
+      }
     }
-  },
+  ],
   "encoding": {
     "x": {"field": "Year", "type": "ordinal", "axis": {"labelExpr": "datum.label % 5 == 0 ? datum.label : ''"}},
     "y": {"field": "Emissions", "type": "quantitative", "title": "Greenhouse Gas Emissions (t)"},
