@@ -198,90 +198,64 @@
     <div id="scatter_plot" class="centered_div">
       <script>
         const vis3 = {
-          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-          "data": {
-            "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/co2-emissions-vs-gdp.csv"
-          },
-          "params": [
-            {
-            "name": "grid",
-            "select": "interval",
-            "bind": "scales"
-            },
-            {
-              "name": "search_input",
-              "bind": {
-                "input": "search",
-                "placeholder": "Country name",
-                "name": "Search"
-              },
-              "value": ""
-            }
-          ],
-          "vconcat": [
-            {
-              "width": 750,
-              "height": 500,
-              "title": "CO2 Emissions vs GDP by Country (2022)",
-              "mark": "circle",
-              "encoding": {
-                "x": {
-                  "field": "Annual-CO2-Emissions",
-                  "type": "quantitative",
-                  "axis": {"title": "CO2 Emissions per capita (t)", "tickCount": 10}
-                },
-                "y": {
-                  "field": "GDP-per-capita",
-                  "type": "quantitative",
-                  "axis": {"title": "GDP per capita (USD)", "tickCount": 10}
-                },
-                "size": {
-                  "field": "Population",
-                  "type": "quantitative",
-                  "scale": {
-                    "type": "threshold",
-                    "domain": [1000000, 10000000, 100000000, 1000000000],
-                    "range": [20, 50, 100, 200, 500]
-                  },
-                  "legend": {
-                  "format": ","
-                  }
-                },
-                "opacity": {
-                  "condition": {
-                    "test": "test(regexp(search_input,'i'),datum.Country)",
-                    "value": 0.6
-                  },
-                  "value": 0.1
-                },
-                "tooltip": [
-                  {
-                    "field": "Country", 
-                    "type": "nominal", 
-                    "title": "Country:"
-                  },
-                  {
-                    "field": "Population", 
-                    "type": "quantitative", 
-                    "title": "Population:",
-                    "format": ","
-                  },
-                  {
-                    "field": "GDP-per-capita", 
-                    "type": "quantitative", 
-                    "title": "GDP:",
-                    "format": "$,d"
-                  },
-                  {
-                    "field": "Annual-CO2-Emissions", 
-                    "type": "quantitative", 
-                    "title": "CO2 Emissions (t):"
-                  }
-                ]
-              }
-            }
-          ]
-        };
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/number-of-natural-disaster-events.csv"
+  },
+  "title": "Number of Natural Disaster Occurrences (1950-2024)",
+  "width": 1000,
+  "height": 500,
+  "mark": {"type": "bar", "size": 12},
+  "params": [
+    {
+      "name": "Selection",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": ["All", "Drought", "Dry mass movement", "Earthquake", "Extreme heat", "Extreme temperature", "Flood", "Glacial lake outburst flood", "Volcanic activity", "Wet mass movement", "Wildfire"],
+        "name": "Disaster: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.Year > 1949"
+    },
+    {
+      "filter": "datum.Entity != 'Fog'"
+    },
+    {
+      "filter": "Selection != 'All' ? datum.Entity == Selection : true"
+    }
+  ], 
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": "Year",
+      "axis": {
+        "labelExpr": "datum.label % 5 == 0 ? datum.label : ''"
+      }
+      
+    },
+    "y": {
+      "aggregate": "sum",
+      "field": "Disasters",
+      "type": "quantitative",
+      "title": "Number of Occurrences"
+    },
+    "color": {
+      "field": "Entity",
+      "type": "nominal",
+      "legend": {"title": "Natural Disaster"}
+    },
+    "tooltip": [
+      {"field": "Entity", "type": "nominal", "title": "Country: "},
+      {"field": "Year", "type": "quantitative", "title": "Year: "},
+      {"field": "Disasters", "type": "quantitative", "title": "Occurrences: "}
+    ]
+  }
+};
         vegaEmbed('#scatter_plot', vis3, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
       </script>
     </div>
