@@ -400,22 +400,50 @@
   "width": 750,
   "height": 500,
   "title": "Sea Level Change along the US Coasts (1960-2023)",
-  "projection": {"type": "albersUsa"},
-  "background": "lightblue",
+  "projection": {"type": "albersUsa", "translate": [{"signal": "x"}, {"signal": "y"}], "scale": {"expr": "zoom_level"}},
+  "background": "white",
+  "params": [
+    {
+      "name": "zoom_level",
+      "value": 900,
+      "bind": {
+        "input": "range",
+        "min": 900,
+        "max": 2000,
+        "step": 100,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "x",
+      "value": 375,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 1000,
+        "step": 10,
+        "name": "X: "
+      }
+    },
+    {
+      "name": "y",
+      "value": 250,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 500,
+        "step": 10,
+        "name": "Y: "
+      }
+    }
+  ],
   "layer": [
     {
       "data": {
         "url": "https://raw.githubusercontent.com/vega/vega/refs/heads/main/docs/data/us-10m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "states"
-        }
+        "format": {"type": "topojson", "feature": "states"}
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#D2E4B9",
-        "stroke": "white"
-      }
+      "mark": {"type": "geoshape", "fill": "#777e6e", "stroke": "white"}
     },
     {
       "data": {
@@ -428,27 +456,27 @@
         {
           "calculate": "abs(datum['Relative-sea-level-change'])",
           "as": "deviation"
-        } 
+        },
+        {
+          "calculate": "format(datum['Relative-sea-level-change'], '0.2f') + 'mm'",
+          "as": "sea-level-change"
+        }
       ],
-      "mark": {
-        "type": "text"
-      },
+      "mark": {"type": "text", "font": "Consolas", "stroke": "white", "strokeWidth": 0.5},
       "encoding": {
         "longitude": {"field": "Longitude", "type": "quantitative"},
         "latitude": {"field": "Latitude", "type": "quantitative"},
         "size": {
           "field": "deviation",
           "type": "quantitative",
-          "scale": {
-            "domain": [0,20],
-            "range": [20,60],
-            "clamp": true
-          }, "legend": {
-            "title": "Absolute change (mm)"
-          }
+          "scale": {"domain": [0, 20], "range": [30, 60], "clamp": true},
+          "legend": {"title": "Absolute change (mm)"}
         },
-        "text": {"condition": {
-          "test": "toNumber(datum['Relative-sea-level-change']) < 0", "value": "↓"},
+        "text": {
+          "condition": {
+            "test": "toNumber(datum['Relative-sea-level-change']) < 0",
+            "value": "↓"
+          },
           "value": "↑"
         },
         "color": {
@@ -456,17 +484,22 @@
           "type": "quantitative",
           "scale": {
             "domain": [-20, 20],
-            "range": ["#6863AD", "#77B2DD", "#AFD8B0", "#F3EB3A", "#F49B4F", "#EC4A4E"],
+            "range": [
+              "#6863AD",
+              "#77B2DD",
+              "#AFD8B0",
+              "#F3EB3A",
+              "#F49B4F",
+              "#EC4A4E"
+            ],
             "clamp": true
-          }, 
-          "legend": {
-            "title": "Sea level change (mm)"
-          }
+          },
+          "legend": {"title": "Sea level change (mm)"}
         },
         "tooltip": [
           {"field": "State", "title": "State: "},
           {"field": "Location", "title": "Location: "},
-          {"field": "Relative-sea-level-change", "title": "Sea level change: "},
+          {"field": "sea-level-change", "title": "Sea level change: "}
         ]
       }
     }
