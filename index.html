@@ -9,22 +9,37 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
+
+<script>
+  function scrollToDiv(divId) {
+    const section = document.getElementById(divId);
+    section.scrollIntoView({behavior: "smooth"});
+  }
+</script>
 <body>
-  <h1 class="centered_title">The Impacts of Climate Change</h1>
-  <!-- Container for the visualization -->
   <div class="centered_container">
+    <h1 class="centered_title">The Impacts of Climate Change</h1>
+    <div><button onclick="scrollToDiv('temperature')">Earth Temperatures</button>
+      <button onclick="scrollToDiv('co2')">CO2 Emissions</button>
+      <button onclick="scrollToDiv('disaster')">Natural Disasters</button>
+      <button onclick="scrollToDiv('sea')">Sea Level</button></div>
+    <p class="intro">Climate change has become one of the biggest challenges our planet faces today. Sea levels are rising and ocenas are becoming warmer everyday, and extreme weather has become more common than ever before. The visualizations below explores the diverse effects of climate change as well as its main contributors.</p>
+  </div>
+  <!-- Container for the visualization -->
+  <section class="parent">
+  <div id="temperature" class="centered_container">
       <div class="title">
       <h2>Rising Annual Temperatures</h2>
       </div>
       <div class="description">
-        <p>Climate change is the leading cause of rising temperatures across the globe, primarily due to the increased concentration of greenhouse gases in the atmosphere. Human activity such as burning fossil fuels and industrial processes have sped
+        <p>Climate change is the leading cause of rising temperatures across the globe, primarily due to the increased concentration of <strong>greenhouse gases</strong> in the atmosphere. Human activity such as <strong>burning fossil fuels</strong> and <strong>industrial processes</strong> have sped
         up this effect tremendously, and as a result causing major disruptions in weather patterns and accelerated melting of polar ice.</p>
       </div>
     <div id="choropleth_map" class="centered_div">
       <script>
         const vis1 = {
           "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-          "title": "Global Annual Surface Temperatures",
+          "title": "Global Annual Surface Temperatures (Celsius)",
           "width": 800,
           "height": 400,
           "params": [
@@ -117,18 +132,20 @@
       </script>
     </div>
   </div>
+</section>
     
   <br>
 
-  <div class="centered_container">
+  <section class="parent">
+  <div id="co2" class="centered_container">
       <div class="title">
       <h2>Rising CO2 Emissions across the Globe</h2>
       </div>
       <div class="description">
       <p>Rising CO2 emissions are at the core of climate change, as carbon dioxide is the primary greenhouse gas contributing to global warming. 
           Human activity such as burning fossil fuels release large amounts of CO2 into the atmosphere, which traps heat from the sun, creating a
-          "greenhouse effect" that warms the planet. Over the past few decades, global CO2 emissions have continued to grow, with no signs of decreasing any time soon. While North America and Europe have started 
-      the shift towards renewable energy and EVs - hence the recent decreasing trend - emissions from other regions continue to show a steady increase.</p>
+          <strong style="color: red">"greenhouse effect"</strong> that warms the planet. Over the past few decades, global CO2 emissions have continued to grow, with no signs of decreasing any time soon. While North America and Europe have started 
+      the shift towards <strong>renewable energy</strong> and <strong>EVs</strong> - hence the recent decreasing trend - emissions from <strong>other regions</strong> (namely Asia) continue to show a steady increase.</p>
       </div>
     <div id="area_chart" class="centered_div">
       <script>
@@ -207,10 +224,154 @@
       </script>
     </div>
   </div>
+</section>
 
   <br>
 
-  <div class="centered_container">
+  <section class="parent">
+    <div class="centered_container">
+      <div class="title">
+        <h2>CO2 Emissions by Sector</h2>
+        </div>
+        <div class="description">
+        <p><strong>Electricity and heat</strong> has constantly contributed to the most CO2 emissions over the past 3 decades, reaching an all time high in <strong>2021</strong> at a whopping <strong style="color: red">15.8 billion</strong> tons globally.
+        This statistic goes to show how much the general population contributes to climate change - millions if not billions of CO2 emissions could be spared potentially if the world 
+        came together and worked towards it.</p>
+        </div>
+      <div id="line_chart" class="centered_div">
+        <script>
+          const vis4 = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "Stock prices of 5 Tech Companies over Time.",
+    "data": {"url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/ghg-emissions-by-sector.csv"},
+    "title": "Annual Greenhouse Gas Emissions by Sector (1990-2020)",
+    "width": 750,
+    "height": 500,
+    "layer": [
+      {
+        "mark": {
+          "type": "line",
+          "point": {
+            "filled": false,
+            "fill": "white"
+          }
+        }
+      },
+      {
+        "transform": [
+          {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"}
+        ],
+        "mark": {
+          "type": "rect",
+          "xOffset": -80,
+          "yOffset": 68,
+          "width": 170,
+          "height": 90,
+          "fill": "yellow",
+          "fillOpacity": 0.2,
+          "stroke": "black",
+          "cornerRadius": 5
+        },
+        "encoding": {
+          "text": {"field": "label"}
+        }
+      },
+      {
+        "transform": [
+          {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+          {
+            "calculate": "'Highest Sector'",
+            "as": "label"
+          },
+        ],
+        "mark": {
+          "type": "text",
+          "xOffset": -80,
+          "yOffset": 45,
+          "fontSize": 15,
+          "lineBreak": "_",
+          "lineHeight": 25,
+          "fill": "black",
+          "fontWeight": "bold"
+          
+        },
+        "encoding": {
+          "text": {"field": "label"}
+        }
+      },
+      {
+        "transform": [
+          {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+          {
+            "calculate": "'Electricity and heat'",
+            "as": "label"
+          },
+        ],
+        "mark": {
+          "type": "text",
+          "xOffset": -80,
+          "yOffset": 70,
+          "fontSize": 15,
+          "lineBreak": "_",
+          "lineHeight": 25,
+          "fill": "black"
+        },
+        "encoding": {
+          "text": {"field": "label"}
+        }
+      },
+      {
+        "transform": [
+          {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
+          {
+            "calculate": "'(+75% between 1990-2020)'",
+            "as": "label"
+          },
+        ],
+        "mark": {
+          "type": "text",
+          "xOffset": -80,
+          "yOffset": 90,
+          "fontSize": 12,
+          "lineBreak": "_",
+          "lineHeight": 25,
+          "fill": "red"
+        },
+        "encoding": {
+          "text": {"field": "label"}
+        }
+      }
+    ],
+    "encoding": {
+      "x": {"field": "Year", "type": "ordinal", "axis": {"labelExpr": "datum.label % 5 == 0 ? datum.label : ''"}},
+      "y": {"field": "Emissions", "type": "quantitative", "title": "Greenhouse Gas Emissions (t)"},
+      "color": {"field": "Sector", "type": "nominal"},
+      "tooltip": [
+        {"field": "Sector", "type": "nominal", "title": "Sector: "},
+        {"field": "Year", "type": "ordinal", "title": "Year: "},
+        {"field": "Emissions", "type": "quantitative", "title": "Annual Emissions (t): ", "format": ","}
+      ]
+    }
+  };
+          vegaEmbed('#line_chart', vis4, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+        </script>
+      </div>
+    </div>
+  </section>
+  
+      <br>
+  
+
+  <section class="parent">
+  <div id="disaster" class="centered_container">
+    <div class="title">
+      <h2>Increase in Natural Disasters</h2>
+      </div>
+      <div class="description">
+      <p>Natural disasters have become increasingly common over the past few decades, and its cause is none other than climate change. Climate change has disrupted weather patterns
+        across the globe, leading to more frequent and severe natural disasters such as <strong>floods</strong>, <strong>heatwaves</strong>, and <strong>hurricanes</strong> (the latter 2 fall under extreme weather).
+        Between 1950 and 2023, floods have become over <strong style="color: red">15 times</strong> more frequent throughout the year, and similarly for extreme weather by <strong style="color: red">20 times</strong>.</p>
+      </div>
     <div id="stacked_bar_chart" class="centered_div">
       <script>
         const vis3 = {
@@ -282,149 +443,38 @@
       </script>
     </div>
   </div>
+</section>
 
 <br>
 
-  <div class="centered_container">
-    <div id="line_chart" class="centered_div">
-      <script>
-        const vis4 = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Stock prices of 5 Tech Companies over Time.",
-  "data": {"url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/ghg-emissions-by-sector.csv"},
-  "title": "Annual Greenhouse Gas Emissions by Sector (1990-2020)",
-  "width": 750,
-  "height": 500,
-  "layer": [
-    {
-      "mark": {
-        "type": "line",
-        "point": {
-          "filled": false,
-          "fill": "white"
-        }
-      }
-    },
-    {
-      "transform": [
-        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"}
-      ],
-      "mark": {
-        "type": "rect",
-        "xOffset": -80,
-        "yOffset": 68,
-        "width": 170,
-        "height": 90,
-        "fill": "yellow",
-        "fillOpacity": 0.2,
-        "stroke": "black",
-        "cornerRadius": 5
-      },
-      "encoding": {
-        "text": {"field": "label"}
-      }
-    },
-    {
-      "transform": [
-        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
-        {
-          "calculate": "'Highest Sector'",
-          "as": "label"
-        },
-      ],
-      "mark": {
-        "type": "text",
-        "xOffset": -80,
-        "yOffset": 45,
-        "fontSize": 15,
-        "lineBreak": "_",
-        "lineHeight": 25,
-        "fill": "black",
-        "fontWeight": "bold"
-        
-      },
-      "encoding": {
-        "text": {"field": "label"}
-      }
-    },
-    {
-      "transform": [
-        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
-        {
-          "calculate": "'Electricity and heat'",
-          "as": "label"
-        },
-      ],
-      "mark": {
-        "type": "text",
-        "xOffset": -80,
-        "yOffset": 70,
-        "fontSize": 15,
-        "lineBreak": "_",
-        "lineHeight": 25,
-        "fill": "black"
-      },
-      "encoding": {
-        "text": {"field": "label"}
-      }
-    },
-    {
-      "transform": [
-        {"filter": "datum.Year == 2020 && datum.Sector == 'Electricity-and-heat'"},
-        {
-          "calculate": "'(+75% between 1990-2020)'",
-          "as": "label"
-        },
-      ],
-      "mark": {
-        "type": "text",
-        "xOffset": -80,
-        "yOffset": 90,
-        "fontSize": 12,
-        "lineBreak": "_",
-        "lineHeight": 25,
-        "fill": "red"
-      },
-      "encoding": {
-        "text": {"field": "label"}
-      }
-    }
-  ],
-  "encoding": {
-    "x": {"field": "Year", "type": "ordinal", "axis": {"labelExpr": "datum.label % 5 == 0 ? datum.label : ''"}},
-    "y": {"field": "Emissions", "type": "quantitative", "title": "Greenhouse Gas Emissions (t)"},
-    "color": {"field": "Sector", "type": "nominal"},
-    "tooltip": [
-      {"field": "Sector", "type": "nominal", "title": "Sector: "},
-      {"field": "Year", "type": "ordinal", "title": "Year: "},
-      {"field": "Emissions", "type": "quantitative", "title": "Annual Emissions (t): ", "format": ","}
-    ]
-  }
-};
-        vegaEmbed('#line_chart', vis4, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
-      </script>
-    </div>
-  </div>
-
-    <br>
-
-  <div class="centered_container">
-    <div id="us_map" class="centered_div">
+<section class="parent">
+  <div id="sea" class="centered_container">
+    <div class="title">
+      <h2>Sea Level Rise</h2>
+      </div>
+      <div class="description">
+      <p>Sea level rise is one of the most significant consequences of climate change, driven primarily by the <strong>melting of glaciers</strong> and <strong>polar ice sheets</strong>, 
+        as well as the <strong>expansion of seawater</strong> as it warms. Rising sea levels threaten coastal communities, leading to increased flooding, 
+        erosion, and habitat loss. Sea level along the US coastlines have risen significantly between 1960-2023, especially along the <strong>east coast</strong>, which has recently been found
+      to be sinking at a slow pace. Between 1880 and 2023, the global average sea level has increased by over <strong style="color: red">10mm</strong>.</p>
+      </div>
+    <div class="horizontal_container">
+    <div id="us_map">
       <script>
         const vis5 = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 750,
-  "height": 500,
+  "width": 500,
+  "height": 300,
   "title": "Sea Level Change along the US Coasts (1960-2023)",
   "projection": {"type": "albersUsa", "translate": [{"signal": "x"}, {"signal": "y"}], "scale": {"expr": "zoom_level"}},
   "background": "white",
   "params": [
     {
       "name": "zoom_level",
-      "value": 900,
+      "value": 500,
       "bind": {
         "input": "range",
-        "min": 900,
+        "min": 500,
         "max": 2000,
         "step": 100,
         "name": "Zoom: "
@@ -432,10 +482,10 @@
     },
     {
       "name": "x",
-      "value": 375,
+      "value": 280,
       "bind": {
         "input": "range",
-        "min": 0,
+        "min": -200,
         "max": 1000,
         "step": 10,
         "name": "X: "
@@ -443,7 +493,7 @@
     },
     {
       "name": "y",
-      "value": 250,
+      "value": 140,
       "bind": {
         "input": "range",
         "min": 0,
@@ -523,21 +573,16 @@
 };
         vegaEmbed('#us_map', vis5, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
       </script>
-    </div>
   </div>
-
-    <br>
-
-  <div class="centered_container">
-    <div id="line_chart2" class="centered_div">
+    <div id="line_chart2">
       <script>
         const vis6 = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Google's stock price over time.",
   "data": {"url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/global-sea-level-change.csv"},
   "title": "Global sea level change (1880-2023)",
-  "width": 750,
-  "height": 500,
+  "width": 400,
+  "height": 350,
   "transform": [
     {
       "calculate": "datum.Attribute == 'Adjusted-sea-level' ? 'Adjusted sea level' : datum.Attribute == 'Lower-error-bound' ? 'Lower error bound' : datum.Attribute == 'Upper-error-bound' ? 'Upper error bound' : 'Satellite measurements'",
@@ -551,7 +596,7 @@
   "mark": {"type": "line", "interpolate": "linear"},
   "encoding": {
     "x": {"field": "Year", "type": "ordinal", "axis": {
-      "labelExpr": "datum.label % 5 == 0 ? datum.label : ''",
+      "labelExpr": "datum.label % 10 == 0 ? datum.label : ''",
       "ticks": false
     }},
     "y": {"field": "Sea-level-change", "type": "quantitative"},
@@ -565,8 +610,10 @@
 };
         vegaEmbed('#line_chart2', vis6, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
       </script>
-    </div>
   </div>
+  </div>
+  </div>
+</section>
 
 </body>
 </html>
