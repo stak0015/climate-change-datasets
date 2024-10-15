@@ -1,9 +1,38 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
+    /* background-image: url("https://cdn.discordapp.com/attachments/786095679386681347/1295700811497865296/dried-earth-texture-14669426.jpg?ex=670f9aea&is=670e496a&hm=8a1cdd9be78014ec1d9e6d8b0d28ef6c755e200896a29eceaaeb23d6fe2ac3e2&"); */
+    background-size: 100% auto;
+    background-color: #6d6d6d;
 }
 
 .title {
     display: flex;
+}
+
+.horizontal_container {
+    margin: 30px 0px;
+}
+
+button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #6d6d6d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    margin: 10px 5px;
+}
+
+button:hover {
+    background-color: #4d4d4d;
+}
+
+.intro {
+    color:#ffffff;
+    width: 50%;
+    font-size: 18px;
+    text-align: center;
 }
 
 .description{
@@ -14,11 +43,29 @@ body {
     font-family: Arial, sans-serif;
 }
 
+h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 20px;
+    margin-top: 40px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+p {
+    margin: 20px 100px;
+    font-size: 18px;
+}
+
 .centered_title {
     text-align: center;
     font-size: 2em;
     font-weight: bold;
+    margin-top: 50px;
     margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    color: #ffffff;
+    
   }
   
   .centered_subtitle {
@@ -46,6 +93,16 @@ body {
     align-items: center; /* Centers vertically */
   }
   
-  .centered_div {
-    padding: 30px;
-  }
+.centered_div {
+padding: 30px;
+}
+
+.parent {
+    margin: 30px auto;
+    width: 70%;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 100;
+}
