@@ -510,5 +510,47 @@
     </div>
   </div>
 
+    <br>
+
+  <div class="centered_container">
+    <div id="line_chart2" class="centered_div">
+      <script>
+        const vis6 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Google's stock price over time.",
+  "data": {"url": "https://raw.githubusercontent.com/stak0015/climate-change-datasets/refs/heads/main/global-sea-level-change.csv"},
+  "title": "Global sea level change (1880-2023)",
+  "width": 750,
+  "height": 500,
+  "transform": [
+    {
+      "calculate": "datum.Attribute == 'Adjusted-sea-level' ? 'Adjusted sea level' : datum.Attribute == 'Lower-error-bound' ? 'Lower error bound' : datum.Attribute == 'Upper-error-bound' ? 'Upper error bound' : 'Satellite measurements'",
+      "as": "Category"
+    },
+    {
+      "calculate": "format(datum['Sea-level-change'], '.2f') + 'mm'",
+      "as": "Sea"
+    }
+  ],
+  "mark": {"type": "line", "interpolate": "linear"},
+  "encoding": {
+    "x": {"field": "Year", "type": "ordinal", "axis": {
+      "labelExpr": "datum.label % 5 == 0 ? datum.label : ''",
+      "ticks": false
+    }},
+    "y": {"field": "Sea-level-change", "type": "quantitative"},
+    "color": {"field": "Category"},
+    "tooltip": [
+      {"field": "Year", "title": "Year: "},
+      {"field": "Category", "title": "Category: "},
+      {"field": "Sea", "title": "Sea level change: "}
+    ]
+  }
+};
+        vegaEmbed('#line_chart2', vis6, {mode: "vega-lite"}).then(console.log).catch(console.warn);;
+      </script>
+    </div>
+  </div>
+
 </body>
 </html>
